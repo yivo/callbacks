@@ -43,6 +43,8 @@
       var INITIALIZERS = '_' + _.generateID();
          """
   
+  {removeAt} = _
+  
   VERSION: '1.0.0'
   
   ClassMembers:
@@ -65,9 +67,9 @@
       i   = -2
       while (i+=2) < l
         if ary[i] is name
-         _.removeAt(ary, i, 2)
-         i -= 2
-         l -= 2
+          removeAt(ary, i, 2)
+          i -= 2
+          l -= 2
       this
   
   InstanceMembers:

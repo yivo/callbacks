@@ -12,7 +12,7 @@
       root.Callbacks = factory(root, root._);
     }
   })(function(__root__, _) {
-    var supportsConst;
+    var removeAt, supportsConst;
     supportsConst = (function() {
       try {
         eval('const BLACKHOLE;');
@@ -26,6 +26,7 @@
     } else {
       eval("var CALLBACKS    = '_' + _.generateID();\nvar INITIALIZERS = '_' + _.generateID();");
     }
+    removeAt = _.removeAt;
     return {
       VERSION: '1.0.0',
       ClassMembers: {
@@ -50,7 +51,7 @@
           i = -2;
           while ((i += 2) < l) {
             if (ary[i] === name) {
-              _.removeAt(ary, i, 2);
+              removeAt(ary, i, 2);
               i -= 2;
               l -= 2;
             }
