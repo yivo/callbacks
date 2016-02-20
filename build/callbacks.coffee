@@ -43,13 +43,22 @@
       var INITIALIZERS = '_' + _.generateID();
          """
   
-  {removeAt} = _
+  {removeAt, isString, generateID} = _
   
   VERSION: '1.0.0'
   
   ClassMembers:
   
-    callback: (name, options, fn) ->
+    callback: (arg1, arg2, arg3) ->
+      if typeof arg1 is 'string'
+        name    = arg1
+        options = arg2
+        fn      = arg3
+      else
+        name    = "anonymous-#{generateID()}"
+        options = arg1
+        fn      = arg2
+  
       type = if options.once then 'once' else 'on'
       @reopenArray CALLBACKS, [name, type, options[type], fn]
       this
@@ -57,7 +66,7 @@
     initializer: (name, fn) ->
       if arguments.length < 2
         fn   = name
-        name = 'anonymous'
+        name = "anonymous-#{generateID()}"
       @reopenArray INITIALIZERS, [name, fn]
       this
   

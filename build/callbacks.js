@@ -12,7 +12,7 @@
       root.Callbacks = factory(root, root._);
     }
   })(function(__root__, _) {
-    var removeAt, supportsConst;
+    var generateID, isString, removeAt, supportsConst;
     supportsConst = (function() {
       try {
         eval('const BLACKHOLE;');
@@ -26,12 +26,21 @@
     } else {
       eval("var CALLBACKS    = '_' + _.generateID();\nvar INITIALIZERS = '_' + _.generateID();");
     }
-    removeAt = _.removeAt;
+    removeAt = _.removeAt, isString = _.isString, generateID = _.generateID;
     return {
       VERSION: '1.0.0',
       ClassMembers: {
-        callback: function(name, options, fn) {
-          var type;
+        callback: function(arg1, arg2, arg3) {
+          var fn, name, options, type;
+          if (typeof arg1 === 'string') {
+            name = arg1;
+            options = arg2;
+            fn = arg3;
+          } else {
+            name = "anonymous-" + (generateID());
+            options = arg1;
+            fn = arg2;
+          }
           type = options.once ? 'once' : 'on';
           this.reopenArray(CALLBACKS, [name, type, options[type], fn]);
           return this;
@@ -39,7 +48,7 @@
         initializer: function(name, fn) {
           if (arguments.length < 2) {
             fn = name;
-            name = 'anonymous';
+            name = "anonymous-" + (generateID());
           }
           this.reopenArray(INITIALIZERS, [name, fn]);
           return this;
