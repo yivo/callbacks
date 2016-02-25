@@ -4,11 +4,11 @@
 class Base
   @include Callbacks
   @include PublisherSubscriber
+
   constructor: (params) -> @initialize(params)
 
 class Person extends Base
-  @initializer 'defaults', ->
-    @name = 'Yaroslav'
+  @initializer 'defaults', -> @name = 'Yaroslav'
 
   @callback on: 'change:name', -> # do stuff
 

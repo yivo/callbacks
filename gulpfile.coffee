@@ -9,14 +9,13 @@ require('gulp-lazyload')
   rename:     'gulp-rename'
   del:        'del'
   plumber:    'gulp-plumber'
-  ejs:        'gulp-ejs'
+  replace:    'gulp-replace'
 
 gulp.task 'default', ['build', 'watch'], ->
 
 dependencies = [
-  {require: 'lodash', global: '_'}
-  {require: 'yess'}
-  {require: 'coffee-concerns'}
+  {require: 'lodash'}
+  {require: 'yess', global: '_'}
   {require: 'publisher-subscriber'}
 ]
 
@@ -26,7 +25,8 @@ gulp.task 'build', ->
   .pipe preprocess()
   .pipe iife {global: 'Callbacks', dependencies}
   .pipe concat('callbacks.coffee')
-  .pipe ejs({}, {ext: '.coffee'})
+  .pipe replace(/CALLBACKS/g, "'_4'")
+  .pipe replace(/INITIALIZERS/g, "'_5'")
   .pipe gulp.dest('build')
   .pipe coffee()
   .pipe concat('callbacks.js')

@@ -1,29 +1,24 @@
-supportsConst = do ->
-  try
-    eval 'const BLACKHOLE;'
-    true
-  catch
-    false
+{removeAt, isString, isFunction, generateID} = _
 
-if supportsConst
-  eval """
-    const CALLBACKS    = '_' + _.generateID();
-    const INITIALIZERS = '_' + _.generateID();
-       """
-else
-  eval """
-    var CALLBACKS    = '_' + _.generateID();
-    var INITIALIZERS = '_' + _.generateID();
-       """
+class InvalidCallback extends Error
+  constructor: (fn) ->
+    @name    = 'InvalidCallback'
+    @message = "[Callbacks] #{fn} isn't a valid callable"
+    super(@message)
+    Error.captureStackTrace?(this, @name) or (@stack = new Error().stack)
 
-{removeAt, isString, generateID} = _
+wrapIf = (fn, condition) ->
+  ->
+    ok = if isString(condition) then this[condition]() else condition.call(this)
+    fn.apply(this, arguments) if ok
+    return
 
-VERSION: '1.0.0'
+VERSION: '1.0.1'
 
 ClassMembers:
 
   callback: (arg1, arg2, arg3) ->
-    if typeof arg1 is 'string'
+    if isString(arg1)
       name    = arg1
       options = arg2
       fn      = arg3
@@ -32,15 +27,22 @@ ClassMembers:
       options = arg1
       fn      = arg2
 
-    type = if options.once then 'once' else 'on'
-    @reopenArray CALLBACKS, [name, type, options[type], fn]
+    eventType = if options.once? then 'once' else 'on'
+    eventName = options[eventType]
+    throw new InvalidCallback(fn) unless isFunction(fn)
+    fn = wrapIf(fn, options.if) if options.if?
+    @reopenArray(CALLBACKS, [name, eventType, eventName, fn])
     this
 
-  initializer: (name, fn) ->
-    if arguments.length < 2
-      fn   = name
+  initializer: (arg1, arg2) ->
+    if isString(arg1)
+      name = arg1
+      fn   = arg2
+    else
       name = "anonymous-#{generateID()}"
-    @reopenArray INITIALIZERS, [name, fn]
+      fn   = arg1
+    throw new InvalidCallback(fn) unless isFunction(fn)
+    @reopenArray(INITIALIZERS, [name, fn])
     this
 
   deleteInitializer: (name) ->
@@ -56,18 +58,16 @@ ClassMembers:
 
 InstanceMembers:
 
-  runInitializers: (arg) ->
-    ref = this[INITIALIZERS]
-    if ref
-      i = -1
-      l = ref.length
-      ref[i].call(this, arg) while (i+=2) < l
-    return
+  initialize: (arg) ->
+    ref1 = this[CALLBACKS]
+    if ref1
+      i1 = -4
+      l1 = ref1.length
+      this[ref1[i1+1]](ref1[i1+2], ref1[i1+3]) while (i1+=4) < l1
 
-  bindCallbacks: ->
-    ref = this[CALLBACKS]
-    if ref
-      l = ref.length
-      i = -4
-      this[ref[i+1]](ref[i+2], ref[i+3]) while (i+=4) < l
+    ref2 = this[INITIALIZERS]
+    if ref2
+      i2 = -1
+      l2 = ref2.length
+      ref2[i2].call(this, arg) while (i2+=2) < l2
     return

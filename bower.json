@@ -1,12 +1,23 @@
 {
   "name": "callbacks",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "description": "Callbacks for JavaScript classes (used with https://github.com/yivo/publisher-subscriber)",
   "main": "build/callbacks.js",
-  "description": "Callbacks for pub-sub",
   "authors": [
     "Yaroslav Konoplov <yaroslav@inbox.com>"
   ],
   "license": "MIT",
+  "keywords": [
+    "publisher-subscriber",
+    "events",
+    "callbacks"
+  ],
+  "homepage": "https://github.com/yivo/callbacks",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
   "ignore": [
     "node_modules",
     "bower_components",
@@ -15,5 +26,10 @@
     "spec",
     "coffeespec",
     "gulpfile.*"
-  ]
+  ],
+  "dependencies": {
+    "lodash": "^3.10.0",
+    "yess": "^1.0.0",
+    "publisher-subscriber": "^1.0.0"
+  }
 }
