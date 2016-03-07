@@ -72,6 +72,9 @@
       @reopenArray('_5', [name, fn])
       this
   
+    finalizer: (fn) ->
+      @callback(on: 'destroy', fn)
+  
     deleteInitializer: (name) ->
       ary = @reopenArray('_5')
       l   = ary.length

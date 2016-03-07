@@ -79,6 +79,11 @@
           this.reopenArray('_5', [name, fn]);
           return this;
         },
+        finalizer: function(fn) {
+          return this.callback({
+            on: 'destroy'
+          }, fn);
+        },
         deleteInitializer: function(name) {
           var ary, i, l;
           ary = this.reopenArray('_5');

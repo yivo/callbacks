@@ -45,6 +45,9 @@ ClassMembers:
     @reopenArray(INITIALIZERS, [name, fn])
     this
 
+  finalizer: (fn) ->
+    @callback(on: 'destroy', fn)
+
   deleteInitializer: (name) ->
     ary = @reopenArray(INITIALIZERS)
     l   = ary.length
