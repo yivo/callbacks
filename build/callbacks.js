@@ -40,7 +40,7 @@
       };
     };
     return {
-      VERSION: '1.0.1',
+      VERSION: '1.0.2',
       ClassMembers: {
         callback: function(arg1, arg2, arg3) {
           var eventName, eventType, fn, name, options;
