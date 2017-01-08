@@ -1,105 +1,56 @@
 ((factory) ->
 
   # Browser and WebWorker
-  root = if typeof self is 'object' && self.self is self
+  root = if typeof self is 'object' and self isnt null and self.self is self
     self
 
   # Server
-  else if typeof global is 'object' && global.global is global
+  else if typeof global is 'object' and global isnt null and global.global is global
     global
 
   # AMD
-  if typeof define is 'function' and define.amd
-    define ['yess', 'lodash', 'publisher-subscriber', 'exports'], (_, exports) ->
-      root.Callbacks = factory(root, _)
+  if typeof define is 'function' and typeof define.amd is 'object' and define.amd isnt null
+    root.Callbacks = factory(root)
+    define -> root.Callbacks
 
   # CommonJS
-  else if typeof module is 'object' && module isnt null && typeof module.exports is 'object'
-    module.exports = factory(root, require('yess'), require('lodash'), require('publisher-subscriber'))
+  else if typeof module is 'object' and module isnt null and
+          typeof module.exports is 'object' and module.exports isnt null
+    module.exports = factory(root)
 
   # Browser and the rest
   else
-    root.Callbacks = factory(root, root._)
+    root.Callbacks = factory(root)
 
   # No return value
   return
 
-)((__root__, _) ->
-  {removeAt, isString, isFunction, generateID} = _
-  
-  class InvalidCallback extends Error
-    constructor: (fn) ->
-      @name    = 'InvalidCallback'
-      @message = "[Callbacks] #{fn} isn't a valid callable"
-      super(@message)
-      Error.captureStackTrace?(this, @name) or (@stack = new Error().stack)
-  
+)((__root__) ->
   wrapIf = (fn, condition) ->
     ->
-      ok = if isString(condition) then this[condition]() else condition.call(this)
-      fn.apply(this, arguments) if ok
+      passes = if condition.call? then condition.call(this) else this[condition]()
+      fn.apply(this, arguments) if passes
       return
   
-  VERSION: '1.0.2'
+  VERSION: '1.1.0'
+  
+  included: ->
+    @initializer ->
+      c = @__callbacks__
+      i = -3
+      l = c.length
+      this[c[i]](c[i+1], c[i+2]) while (i+=3) < l
+      return
   
   ClassMembers:
-  
-    callback: (arg1, arg2, arg3) ->
-      if isString(arg1)
-        name    = arg1
-        options = arg2
-        fn      = arg3
-      else
-        name    = "anonymous-#{generateID()}"
-        options = arg1
-        fn      = arg2
-  
-      eventType = if options.once? then 'once' else 'on'
-      eventName = options[eventType]
-      throw new InvalidCallback(fn) unless isFunction(fn)
-      fn = wrapIf(fn, options.if) if options.if?
-      @reopenArray('_4', [name, eventType, eventName, fn])
+    callback: (options, fn) ->
+      eventtype = if options.once? then 'once' else 'on'
+      eventname = options[eventtype]
+      eventfn   = if options.if? then wrapIf(fn, options.if) else fn 
+      this::__callbacks__ = this::__callbacks__.concat([eventtype, eventname, eventfn])
+      Object.freeze?(this::__callbacks__)
       this
-  
-    initializer: (arg1, arg2) ->
-      if isString(arg1)
-        name = arg1
-        fn   = arg2
-      else
-        name = "anonymous-#{generateID()}"
-        fn   = arg1
-      throw new InvalidCallback(fn) unless isFunction(fn)
-      @reopenArray('_5', [name, fn])
-      this
-  
-    finalizer: (fn) ->
-      @callback(on: 'destroy', fn)
-  
-    deleteInitializer: (name) ->
-      ary = @reopenArray('_5')
-      l   = ary.length
-      i   = -2
-      while (i+=2) < l
-        if ary[i] is name
-          removeAt(ary, i, 2)
-          i -= 2
-          l -= 2
-      this
-  
+      
   InstanceMembers:
-  
-    initialize: (arg) ->
-      ref1 = this['_4']
-      if ref1
-        i1 = -4
-        l1 = ref1.length
-        this[ref1[i1+1]](ref1[i1+2], ref1[i1+3]) while (i1+=4) < l1
-  
-      ref2 = this['_5']
-      if ref2
-        i2 = -1
-        l2 = ref2.length
-        ref2[i2].call(this, arg) while (i2+=2) < l2
-      return
-  
+    __callbacks__: []
 )

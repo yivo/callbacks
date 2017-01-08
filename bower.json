@@ -1,17 +1,11 @@
 {
   "name": "callbacks",
-  "version": "1.0.2",
-  "description": "Callbacks for JavaScript classes (used with https://github.com/yivo/publisher-subscriber)",
+  "description": "Nice API for PublisherSubscriber (https://github.com/yivo/publisher-subscriber)",
   "main": "build/callbacks.js",
   "authors": [
-    "Yaroslav Konoplov <yaroslav@inbox.com>"
+    "Yaroslav Konoplov <eahome00@gmail.com>"
   ],
   "license": "MIT",
-  "keywords": [
-    "publisher-subscriber",
-    "events",
-    "callbacks"
-  ],
   "homepage": "https://github.com/yivo/callbacks",
   "moduleType": [
     "amd",
@@ -28,8 +22,7 @@
     "gulpfile.*"
   ],
   "dependencies": {
-    "lodash": "^4.5.1",
-    "yess": "^1.0.0",
-    "publisher-subscriber": "^1.0.0"
+    "publisher-subscriber": "^1.0.0",
+    "initializable": "^1.0.0"
   }
 }

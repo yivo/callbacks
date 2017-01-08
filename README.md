@@ -1,16 +1,15 @@
 # callbacks
 
 ```coffee
-class Base
-  @include Callbacks
+class Person
+  @include Initializable
   @include PublisherSubscriber
-
-  constructor: (params) -> @initialize(params)
-
-class Person extends Base
-  @initializer 'defaults', -> @name = 'Yaroslav'
-
-  @callback on: 'change:name', -> # do stuff
-
-  @callback on: 'change:age', if: (-> @age > 18), -> # do stuff
+  @include Callbacks
+  
+  constructor: ({@name, @age}) -> @initialize.apply(this, arguments)
+  
+  @callback on: 'change:name',               -> # do stuff
+  @callback on: 'change:age', if: 'isAdult', -> # do stuff
+  
+  isAdult: -> @age > 18
 ```
