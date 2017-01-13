@@ -1,28 +1,30 @@
 {
-  "name": "callbacks",
+  "name": "pub-sub-callback-api",
   "description": "Nice API for PublisherSubscriber (https://github.com/yivo/publisher-subscriber)",
-  "main": "build/callbacks.js",
+  "main": "build/pub-sub-callback-api.js",
   "authors": [
     "Yaroslav Konoplov <eahome00@gmail.com>"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/yivo/callbacks",
-  "moduleType": [
-    "amd",
-    "globals",
-    "node"
+  "keywords": [
+    "pub-sub",
+    "publisher-subscriber",
+    "callback",
+    "event",
+    "bind",
+    "on",
+    "listen"
   ],
+  "homepage": "https://github.com/yivo/pub-sub-callback-api",
   "ignore": [
+    "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "tests",
-    "spec",
-    "coffeespec",
-    "gulpfile.*"
+    "tests"
   ],
   "dependencies": {
-    "publisher-subscriber": "^1.0.0",
+    "publisher-subscriber": "^1.0.11",
     "initializable": "^1.0.0"
   }
 }

@@ -1,17 +1,18 @@
-gulp       = require 'gulp'
-concat     = require 'gulp-concat'
-coffee     = require 'gulp-coffee'
-iife       = require 'gulp-iife-wrap'
-plumber    = require 'gulp-plumber'
+gulp    = require 'gulp'
+concat  = require 'gulp-concat'
+coffee  = require 'gulp-coffee'
+umd     = require 'gulp-umd-wrap'
+plumber = require 'gulp-plumber'
+fs      = require 'fs'
 
 gulp.task 'default', ['build'], ->
 
 gulp.task 'build', ->
-  gulp.src('source/callbacks.coffee')
+  gulp.src('source/pub-sub-callback-api.coffee')
     .pipe plumber()
-    .pipe iife(global: 'Callbacks')
-    .pipe concat('callbacks.coffee')
+    .pipe umd(global: 'Callbacks', header: fs.readFileSync('source/__license__.coffee'))
+    .pipe concat('pub-sub-callback-api.coffee')
     .pipe gulp.dest('build')
     .pipe coffee()
-    .pipe concat('callbacks.js')
+    .pipe concat('pub-sub-callback-api.js')
     .pipe gulp.dest('build')

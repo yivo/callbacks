@@ -1,14 +1,19 @@
 {
-  "name": "callbacks",
-  "version": "1.1.0",
+  "name": "pub-sub-callback-api",
+  "version": "1.1.1",
   "description": "Nice API for PublisherSubscriber (https://github.com/yivo/publisher-subscriber)",
-  "main": "build/callbacks.js",
+  "main": "build/pub-sub-callback-api.js",
+  "dependencies": {
+    "publisher-subscriber": "^1.0.11",
+    "initializable": "^1.0.0"
+  },
   "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-coffee": "^2.3.1",
-    "gulp-concat": "^2.5.2",
-    "gulp-iife-wrap": "^1.0.0",
-    "gulp-plumber": "^1.0.0"
+    "coffee-script": "^1.12.2",
+    "gulp": "^3.9.1",
+    "gulp-coffee": "^2.3.3",
+    "gulp-concat": "^2.6.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-umd-wrap": "^1.0.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,11 +25,16 @@
   "author": "Yaroslav Konoplov <eahome00@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yivo/callbacks/issues"
+    "url": "https://github.com/yivo/pub-sub-callback-api/issues"
   },
-  "homepage": "https://github.com/yivo/callbacks#readme",
-  "dependencies": {
-    "publisher-subscriber": "^1.0.0",
-    "initializable": "^1.0.0"
-  }
+  "homepage": "https://github.com/yivo/pub-sub-callback-api#readme",
+  "keywords": [
+    "pub-sub",
+    "publisher-subscriber",
+    "callback",
+    "event",
+    "bind",
+    "on",
+    "listen"
+  ]
 }
